@@ -4,6 +4,9 @@
 	"description": "A tiny, framework-agnostic HTML form validation micro-framework.",
 	"main": "formageddon.js",
 	"files": ["formageddon.js"],
+	"scripts": {
+		"minify": "terser formageddon.js -o formageddon.min.js -c -m"
+	},
 	"keywords": [
 		"form",
 		"validation",
