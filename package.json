@@ -1,13 +1,29 @@
 {
 	"name": "formageddon",
 	"version": "0.1.0",
-	"description": "A tiny, framework-agnostic form validation micro-framework.",
+	"description": "A tiny, framework-agnostic HTML form validation micro-framework.",
 	"main": "formageddon.js",
-	"keywords": ["form", "validation", "micro-framework", "vanilla-js", "no-js", "declarative"],
+	"files": ["formageddon.js"],
+	"keywords": [
+		"form",
+		"validation",
+		"micro-framework",
+		"vanilla-js",
+		"no-build",
+		"no-js",
+		"declarative",
+		"zero-dependency",
+		"lightweight",
+		"drop-in"
+	],
 	"author": "Andrew Weymes",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/dimmerz92/formageddon.git"
-	}
+	},
+	"bugs": {
+		"url": "https://github.com/dimmerz92/formageddon/issues"
+	},
+	"homepage": "https://github.com/dimmerz92/formageddon#readme"
 }
