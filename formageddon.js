@@ -76,4 +76,19 @@ const Formageddon = (() => {
 			}
 		}
 	}
+
+	function handleValidInput(input) {
+		input.setAttribute("aria-invalid", "false");
+		const target = input.getAttribute("data-target");
+		if (target) {
+			const targetEl = document.querySelector(target);
+			if (!targetEl) {
+				console.error(`element not found for data-target="${target}"`);
+			} else {
+				targetEl.classList.add("valid");
+				targetEl.classList.remove("invalid");
+				targetEl.textContent = input.getAttribute("data-success") || "";
+			}
+		}
+	}
 })();
