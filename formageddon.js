@@ -1,9 +1,19 @@
 const Formageddon = (() => {
 	"use strict";
 
+	/** @type {WeakSet<HTMLFormElement>} - Tracks initialised forms to prevent duplication */
 	const forms = new WeakSet();
+
+	/** @type {string[]} - HTML form elements to validate */
 	const tags = ["INPUT", "TEXTAREA", "SELECT"];
+
+	/** @type {string[]} - Attributes to be validated */
 	const attrs = ["accept", "min", "max", "step", "minlength", "maxlength", "pattern", "required"];
+
+	/**
+	 * Maps validity errors to attributes containing user defined custom error messages or default error messages.
+	 * @type {Record<string, {attr: string, default: string}} - 
+	 */
 	const errors = {
 		valueMissing: { attr: "data-required-err", default: "This field is required." },
 		typeMismatch: { attr: "data-type-err", default: "The value is not the correct type." },
@@ -16,6 +26,11 @@ const Formageddon = (() => {
 		badInput: { attr: "data-type-err", default: "The input value is invalid." },
 	};
 
+	/**
+	* Validates file inputs with the accept attribute.
+	* @param {HTMLInputElement} input - The file input element to validate.
+	* @returns {boolean} True if all files match the accept attribute, false otherwise.
+	*/
 	function isValidAccept(input) {
 		const accept = input.getAttribute("accept");
 		if (!accept) return true;
@@ -43,7 +58,11 @@ const Formageddon = (() => {
 		return true;
 	}
 
-	// gets custom defined error if it exists, otherwise returns a default.
+	/**
+	* Returns a user defined error message if it exists, otherwise a default error message.
+	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The form control to check.
+	* @returns {string} The error message string.
+	*/
 	function getError(input) {
 		// validate for type=file accept
 		if (input.type === "file" && input.hasAttribute("accept") && input.value.trim()) {
@@ -62,6 +81,11 @@ const Formageddon = (() => {
 		return "";
 	}
 
+	/**
+	* Handles invalid input by setting aria-invalid=true and updating the associated error/success message container if
+	* it exists.
+	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The invalid form control.
+	*/
 	function handleInvalidInput(input) {
 		input.setAttribute("aria-invalid", "true");
 		const target = input.getAttribute("aria-describedby");
@@ -77,6 +101,11 @@ const Formageddon = (() => {
 		}
 	}
 
+	/**
+	* Handles valid input by setting aria-invalid=false and updating the associated error/success message container if
+	* it exists.
+	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The valid form control.
+	*/
 	function handleValidInput(input) {
 		input.setAttribute("aria-invalid", "false");
 		const target = input.getAttribute("aria-describedby");
@@ -92,6 +121,10 @@ const Formageddon = (() => {
 		}
 	}
 
+	/**
+	* Clears validation state from the input and clears the associated error/success message container if it exists.
+	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The neutral/non-required form controlled.
+	*/
 	function clearValidation(input) {
 		input.removeAttribute("aria-invalid");
 		const target = input.getAttribute("aria-describedby");
@@ -106,6 +139,10 @@ const Formageddon = (() => {
 		}
 	}
 
+	/**
+	* Attaches input validation event listeners.
+	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The form control to validate.
+	*/
 	function applyValidator(input) {
 		input.addEventListener("input", function() {
 			if (!this.validity.valid) {
@@ -118,6 +155,9 @@ const Formageddon = (() => {
 		});
 	}
 
+	/**
+	* Initialises validation on all forms with the data-validate attribute.
+	*/
 	function initValidators() {
 		document.querySelectorAll("form[data-validate]").forEach((form) => {
 			if (forms.has(form)) return;
@@ -135,6 +175,7 @@ const Formageddon = (() => {
 		});
 	}
 
+	// start listening baby!
 	document.addEventListener("DOMContentLoaded", () => {
 		initValidators();
 	}, { once: true });
