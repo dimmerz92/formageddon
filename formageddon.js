@@ -64,11 +64,11 @@ const Formageddon = (() => {
 
 	function handleInvalidInput(input) {
 		input.setAttribute("aria-invalid", "true");
-		const target = input.getAttribute("data-target");
+		const target = input.getAttribute("aria-describedby");
 		if (target) {
-			const targetEl = document.querySelector(target);
+			const targetEl = document.getElementById(target);
 			if (!targetEl) {
-				console.error(`element not found for data-target="${target}"`);
+				console.error(`element not found for aria-describedby="${target}"`);
 			} else {
 				targetEl.classList.add("invalid");
 				targetEl.classList.remove("valid");
@@ -79,15 +79,29 @@ const Formageddon = (() => {
 
 	function handleValidInput(input) {
 		input.setAttribute("aria-invalid", "false");
-		const target = input.getAttribute("data-target");
+		const target = input.getAttribute("aria-describedby");
 		if (target) {
-			const targetEl = document.querySelector(target);
+			const targetEl = document.getElementById(target);
 			if (!targetEl) {
-				console.error(`element not found for data-target="${target}"`);
+				console.error(`element not found for aria-describedby="${target}"`);
 			} else {
 				targetEl.classList.add("valid");
 				targetEl.classList.remove("invalid");
 				targetEl.textContent = input.getAttribute("data-success") || "";
+			}
+		}
+	}
+
+	function clearValidation(input) {
+		input.removeAttribute("aria-invalid");
+		const target = input.getAttribute("aria-describedby");
+		if (target) {
+			const targetEl = document.getElementById(target);
+			if (!targetEl) {
+				console.error(`element not found for aria-describedby="${target}"`);
+			} else {
+				targetEl.classList.remove("invalid", "valid");
+				targetEl.textContent = "";
 			}
 		}
 	}
