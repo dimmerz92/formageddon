@@ -16,13 +16,49 @@ const Formageddon = (() => {
 		badInput: { attr: "data-type-err", default: "The input value is invalid." },
 	};
 
+	function isValidAccept(input) {
+		const accept = input.getAttribute("accept");
+		if (!accept) return true;
+
+		const acceptedTypes = accept.split(",").map((s) => s.trim().toLowerCase());
+		const files = input.files;
+		if (!files.length) return true;
+
+		for (const file of files) {
+			const fileType = file.type.toLowerCase();
+			const fileName = file.name.toLowerCase();
+
+			const matches = acceptedTypes.some((type) => {
+				if (type.startsWith(".")) {
+					return fileName.endsWith(type);
+				} else if (type.endsWith("/*")) {
+					return fileType.startsWith(type.slice(0, -1));
+				} else {
+					return fileType === type;
+				}
+			});
+
+			if (!matches) return false;
+		}
+		return true;
+	}
+
 	// gets custom defined error if it exists, otherwise returns a default.
 	function getError(input) {
+		// validate for type=file accept
+		if (input.type === "file" && input.hasAttribute("accept") && input.value.trim()) {
+			if (!isValidAccept(input)) {
+				return input.getAttribute("data-accept-err") || "Invalid file type.";
+			}
+		}
+
+		// validate all others
 		for (const [key, obj] of Object.entries(errors)) {
 			if (input.validity[key]) {
 				return input.getAttribute(obj.attr) || obj.default;
 			}
 		}
+
 		return "";
 	}
 })();
