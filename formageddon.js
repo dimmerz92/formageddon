@@ -105,4 +105,37 @@ const Formageddon = (() => {
 			}
 		}
 	}
+
+	function applyValidator(input) {
+		input.addEventListener("input", function() {
+			if (!this.validity.valid) {
+				handleInvalidInput(this);
+			} else if (this.value.trim()) {
+				handleValidInput(this);
+			} else {
+				clearValidation(this);
+			}
+		});
+	}
+
+	function initValidators() {
+		document.querySelectorAll("form[data-validate]").forEach((form) => {
+			if (forms.has(form)) return;
+			for (let el of form.elements) {
+				if (tags.includes(el.tagName) && !el.hasAttribute("data-ignore")) {
+					for (const attr of el.attributes) {
+						if (attrs.includes(attr.name)) {
+							applyValidator(el)
+							break;
+						}
+					}
+				}
+			}
+			forms.add(form);
+		});
+	}
+
+	document.addEventListener("DOMContentLoaded", () => {
+		initValidators();
+	}, { once: true });
 })();
