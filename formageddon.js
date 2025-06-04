@@ -10,6 +10,9 @@ const Formageddon = (() => {
 	/** @type {string[]} - Attributes to be validated */
 	const attrs = ["accept", "min", "max", "step", "minlength", "maxlength", "pattern", "required"];
 
+	/** @type {string[]} - events on which to trigger validation */
+	const validationEvents = ["input", "change", "blur"];
+
 	/**
 	 * Maps validity errors to attributes containing user defined custom error messages or default error messages.
 	 * @type {Record<string, {attr: string, default: string}} - 
@@ -181,6 +184,18 @@ const Formageddon = (() => {
 	}
 
 	/**
+	* Handles form reset events and clears all validation states and messages.
+	 * @param {Event & { target: HTMLFormElement }} event - The reset event.
+	 */
+	function handleFormReset(event) {
+		for (const el of event.target.elements) {
+			if (tags.includes(el.tagName)) {
+				clearValidation(el);
+			}
+		}
+	}
+
+	/**
 	* Validates a form control and sets appropriate aria-invalid and error/success messages.
 	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The form control to validate.
 	*/
@@ -202,7 +217,7 @@ const Formageddon = (() => {
 	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The form control to validate.
 	*/
 	function applyValidator(input) {
-		input.addEventListener("input", () => validateInput(input));
+		validationEvents.forEach((event) => input.addEventListener(event, () => validateInput(input)));
 
 		if (input.hasAttribute("data-confirm")) {
 			const origin = input.getAttribute("data-confirm");
@@ -217,7 +232,7 @@ const Formageddon = (() => {
 				return
 			}
 
-			originEl.addEventListener("input", () => validateInput(input));
+			validationEvents.forEach((event) => originEl.addEventListener(event, () => validateInput(input)));
 		}
 	}
 
@@ -233,7 +248,7 @@ const Formageddon = (() => {
 		}
 
 		handleFormSubmitControl(form, submit);
-		form.addEventListener("input", () => handleFormSubmitControl(form, submit));
+		validationEvents.forEach((event) => form.addEventListener(event, () => handleFormSubmitControl(form, submit)));
 	}
 
 	/**
@@ -250,6 +265,9 @@ const Formageddon = (() => {
 				}
 				if (el.hasAttribute("data-submit")) {
 					applySubmitValidator(form, el);
+				}
+				if (el.type === "reset") {
+					form.addEventListener("reset", (event) => handleFormReset(event))
 				}
 			}
 			forms.add(form);
