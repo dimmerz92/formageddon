@@ -1,10 +1,10 @@
-<div style="text-align: center;">
+<div align="center">
     <img src="/assets/formageddon.png" alt="formageddon banner"/>
     <h1>Formageddon</h1>
-    <p style="font-weight: bold;">Because unvalidated forms require an act of God.</p>
-    <br/>
-    <p>A tiny, framework-agnostic HTML form validation ~~micro~~ nano-framework.</p>
-    <p style="font-weight: bold;">Zero dependencies. No build step. Just drop it in.</p>
+    <p><b>Because unvalidated forms require an act of God.</b></p>
+    <br>
+    <p>A tiny, framework-agnostic HTML form validation <s>micro</s> nano-framework.</p>
+    <p><b>Zero dependencies. No build step. Just drop it in.</b></p>
 </div>
 
 
