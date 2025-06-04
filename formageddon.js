@@ -203,10 +203,10 @@ const Formageddon = (() => {
 		if (input.disabled ||
 			(input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) && input.readOnly) return;
 
-		if (!input.value.trim()) {
-			clearValidation(input);
-		} else if (!isValidConfirm(input) || !input.validity.valid) {
+		if (!isValidConfirm(input) || !input.validity.valid) {
 			handleInvalidInput(input);
+		} else if (!input.value.trim()) {
+			clearValidation(input);
 		} else {
 			handleValidInput(input);
 		}
@@ -252,30 +252,71 @@ const Formageddon = (() => {
 	}
 
 	/**
+	 * @param {HTMLFormElement} form - The form element to be validated.
+	 */
+	function initForm(form) {
+		for (const el of form.elements) {
+			if (tags.includes(el.tagName) && !el.hasAttribute("data-ignoer")) {
+				if (attrs.some((attr) => el.hasAttribute(attr))) {
+					applyValidator(el);
+				}
+			}
+
+			if (el.hasAttribute("data-submit")) {
+				applySubmitValidator(form, el);
+			}
+
+			if (el.type === "reset") {
+				form.addEventListener("reset", (event) => handleFormReset(event))
+			}
+		}
+	}
+
+	/**
 	* Initialises validation on all forms with the data-validate attribute.
 	*/
 	function initValidators() {
 		document.querySelectorAll("form[data-validate]").forEach((form) => {
 			if (forms.has(form)) return;
-			for (let el of form.elements) {
-				if (tags.includes(el.tagName) && !el.hasAttribute("data-ignore")) {
-					if (attrs.some((attr) => el.hasAttribute(attr))) {
-						applyValidator(el);
-					}
-				}
-				if (el.hasAttribute("data-submit")) {
-					applySubmitValidator(form, el);
-				}
-				if (el.type === "reset") {
-					form.addEventListener("reset", (event) => handleFormReset(event))
-				}
-			}
+			initForm(form);
 			forms.add(form);
 		});
 	}
 
+	/**
+	* @type {MutationObserver} - Watches for form or form control updates in the DOM.
+	*/
+	const observer = new MutationObserver((mutationList, _) => {
+		const formQueue = new Set();
+
+		for (const mutation of mutationList) {
+			for (const node of mutation.addedNodes) {
+				if (!(node instanceof HTMLElement)) continue;
+
+				if (node.tagName === "FORM") {
+					formQueue.add(node);
+				} else {
+					const form = node.closest?.("form");
+					if (form) {
+						formQueue.add(form);
+					}
+				}
+			}
+
+		}
+
+		for (const form of formQueue) {
+			initForm(form);
+		}
+	});
+
 	// start listening baby!
 	document.addEventListener("DOMContentLoaded", () => {
 		initValidators();
+		observer.observe(document.body, { childList: true, subtree: true });
 	}, { once: true });
+
+	return {
+		initForm,
+	}
 })();
