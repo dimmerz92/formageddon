@@ -1,7 +1,12 @@
-# Formageddon
+<div style="text-align: center;">
+    <img src="/assets/formageddon.png" alt="formageddon banner"/>
+    <h1>Formageddon</h1>
+    <p style="font-weight: bold;">Because unvalidated forms require an act of God.</p>
+    <br/>
+    <p>A tiny, framework-agnostic HTML form validation ~~micro~~ nano-framework.</p>
+    <p style="font-weight: bold;">Zero dependencies. No build step. Just drop it in.</p>
+</div>
 
-A tiny, framework-agnostic HTML form validation ~~micro~~ nano-framework.  
-**Zero dependencies. No build step. Just drop it in.**
 
 ## Features
 
@@ -14,8 +19,8 @@ A tiny, framework-agnostic HTML form validation ~~micro~~ nano-framework.
 
 ## Size
 
-- Unminified gzipped ~2.4 KB (8.5 KB)
-- Minified gzipped ~1.3 KB (3.5 KB)
+- Unminified 9.1 KB (gzipped ~2.5 KB)
+- Minified 3.6 KB (gzipped ~1.4 KB)
 
 ## Getting Started
 
@@ -79,6 +84,7 @@ You can customise validation error messages by adding data attributes to your in
 | stepMismatch                 | data-step-err      | The value does not match the step interval.    |
 | badInput                     | data-type-err      | The input value is invalid.                    |
 | invalid file accept (custom) | data-accept-err    | Invalid file type.                             |
+| success (custom)             | data-success       |                                                |
 
 Example:
 
@@ -113,7 +119,7 @@ npm install formageddon
 
 ## License
 
-MIT - [LICENSE]("./LICENSE")
+MIT - [LICENSE]("/LICENSE")
 
 ## Contributing
 
