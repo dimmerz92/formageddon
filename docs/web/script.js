@@ -59,8 +59,8 @@ function initPreview() {
 <html lang="en">
 	<head>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
-		<link rel="stylesheet" href="./style.css" />
-		<script src="../../formageddon.js" defer><\/script>
+		<link rel="stylesheet" href="https://raw.githubusercontent.com/dimmerz92/formageddon/refs/heads/master/docs/web/style.css" />
+		<script src="https://raw.githubusercontent.com/dimmerz92/formageddon/refs/heads/master/formageddon.min.js" defer><\/script>
 	</head>
 	<body id="iframe">
 		<article id="content"></article>
