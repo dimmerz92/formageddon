@@ -14,8 +14,8 @@ A tiny, framework-agnostic HTML form validation ~~micro~~ nano-framework.
 
 ## Size
 
-- Unminified gzipped ~2.3 KB (8.4 KB)
-- Minified gzipped ~1.3 KB (3.6 KB)
+- Unminified gzipped ~2.4 KB (8.5 KB)
+- Minified gzipped ~1.3 KB (3.5 KB)
 
 ## Getting Started
 
