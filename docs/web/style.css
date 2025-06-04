@@ -1,0 +1,80 @@
+:root {
+	--pico-font-size: 16px;
+	--pico-line-height: 1.25;
+	--pico-form-element-spacing-vertical: 0.5rem;
+	--pico-form-element-spacing-horizontal: 1rem;
+	--pico-border-radius: 0;
+}
+
+@media (min-width: 768px) {
+	:root {
+		--pico-font-size: 102.5%;
+	}
+}
+
+@media (min-width: 1024px) {
+	:root {
+		--pico-font-size: 105%;
+	}
+}
+
+@media (min-width: 1280px) {
+	:root {
+		--pico-font-size: 107.5%;
+	}
+}
+
+@media (min-width: 1536px) {
+	:root {
+		--pico-font-size: 110%;
+	}
+}
+
+#page {
+	display: grid;
+	grid-template-rows: auto 1fr;
+	min-height: 100svh;
+
+	&>header {
+		padding: 0;
+	}
+
+	&>main {
+		padding: 0;
+
+		@media (min-width: 1024px) {
+			display: grid;
+			gap: 1rem;
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	&>main>section>article {
+		height: 100%;
+	}
+
+	&>main>section#form>article {
+		display: grid;
+		grid-template-rows: auto 1fr;
+	}
+
+	&>main>section>article>:where(iframe, textarea) {
+		height: 100%;
+		width: 100%;
+	}
+
+	& #editor {
+		font-family: monospace;
+		font-size: 12px;
+		padding: 2px;
+	}
+}
+
+#iframe {
+	min-height: 100svh;
+
+	& article {
+		height: 100svh;
+		margin: 0;
+	}
+}

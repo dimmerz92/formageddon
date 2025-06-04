@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+        <link rel="stylesheet" href="./style.css" />
+        <title>Formageddon - Because unvalidated forms require an act of God</title>
+    </head>
+    <body id="page">
+        <header style="text-align: center;">
+            <img src="../../assets/formageddon.png"
+                 alt="formageddon banner"
+                 width="620" />
+            <hgroup>
+                <h1>Formageddon</h1>
+                <p>Because unvalidated forms require an act of God.</p>
+            </hgroup>
+        </header>
+        <main class="container">
+            <section id="form">
+                <article>
+                    <h2>Preview</h2>
+                    <iframe id="preview"></iframe>
+                </article>
+            </section>
+            <section id="config">
+                <article>
+                    <textarea id="editor"></textarea>
+                </article>
+            </section>
+        </main>
+        <script src="./script.js" defer></script>
+    </body>
+</html>
