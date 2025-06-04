@@ -256,7 +256,7 @@ const Formageddon = (() => {
 	 */
 	function initForm(form) {
 		for (const el of form.elements) {
-			if (tags.includes(el.tagName) && !el.hasAttribute("data-ignoer")) {
+			if (tags.includes(el.tagName) && !el.hasAttribute("data-ignore")) {
 				if (attrs.some((attr) => el.hasAttribute(attr))) {
 					applyValidator(el);
 				}
