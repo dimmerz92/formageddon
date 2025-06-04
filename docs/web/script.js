@@ -60,7 +60,7 @@ function initPreview() {
 	<head>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
 		<link rel="stylesheet" href="style.css" />
-		<script src="../../formageddon.min.js" defer><\/script>
+		<script src="../formageddon.min.js" defer><\/script>
 	</head>
 	<body id="iframe">
 		<article id="content"></article>
