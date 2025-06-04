@@ -8,7 +8,7 @@ const Formageddon = (() => {
 	const tags = ["INPUT", "TEXTAREA", "SELECT"];
 
 	/** @type {string[]} - Attributes to be validated */
-	const attrs = ["accept", "min", "max", "step", "minlength", "maxlength", "pattern", "required"];
+	const attrs = ["accept", "min", "max", "step", "minlength", "maxlength", "pattern", "required", "data-confirm"];
 
 	/** @type {string[]} - events on which to trigger validation */
 	const validationEvents = ["input", "change", "blur"];
@@ -75,6 +75,8 @@ const Formageddon = (() => {
 			console.warn(`element not found for data-confirm=${origin}`);
 			return false;
 		}
+
+		if (!input.required && !input.value.trim()) return true;
 
 		return input.value === originEl.value;
 	}
