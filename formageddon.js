@@ -166,6 +166,19 @@ const Formageddon = (() => {
 	}
 
 	/**
+	* Handles the disabling of the form submit control if it has the data-submit attribute
+	 * @param {HTMLFormElement} form - The form the submit control is within
+	 * @param {HTMLInputElement|HTMLButtonElement} submit - The submit control to toggle disabled
+	 */
+	function handleFormSubmitControl(form, submit) {
+		if (form.checkValidity() && form.querySelectorAll("[aria-invalid=true]").length === 0) {
+			submit.disabled = false;
+		} else {
+			submit.disabled = true;
+		}
+	}
+
+	/**
 	* Validates a form control and sets appropriate aria-invalid and error/success messages.
 	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The form control to validate.
 	*/
@@ -203,6 +216,21 @@ const Formageddon = (() => {
 		}
 	}
 
+
+	/**
+	 * @param {HTMLFormElement} form 
+	 * @param {HTMLInputElement|HTMLButtonElement} submit 
+	 */
+	function applySubmitValidator(form, submit) {
+		if (!["INPUT", "BUTTON"].includes(submit.tagName) || submit.type !== "submit") {
+			console.error("submission button expected to be of type input or button with type=submit")
+			return
+		}
+
+		handleFormSubmitControl(form, submit);
+		form.addEventListener("input", () => handleFormSubmitControl(form, submit));
+	}
+
 	/**
 	* Initialises validation on all forms with the data-validate attribute.
 	*/
@@ -217,6 +245,9 @@ const Formageddon = (() => {
 							break;
 						}
 					}
+				}
+				if (el.hasAttribute("data-submit")) {
+					applySubmitValidator(form, el);
 				}
 			}
 			forms.add(form);
