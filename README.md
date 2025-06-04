@@ -19,8 +19,8 @@
 
 ## Size
 
-- Unminified 9.1 KB (gzipped ~2.5 KB)
-- Minified 3.6 KB (gzipped ~1.4 KB)
+- Unminified 9.9 KB (gzipped ~2.8 KB)
+- Minified 4.0 KB (gzipped ~1.5 KB)
 
 ## Getting Started
 
