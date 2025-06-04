@@ -33,7 +33,7 @@ const Formageddon = (() => {
 	*/
 	function isValidAccept(input) {
 		const accept = input.getAttribute("accept");
-		if (!accept) return true;
+		if (!accept || !accept.trim()) return true;
 
 		const acceptedTypes = accept.split(",").map((s) => s.trim().toLowerCase());
 		const files = input.files;
@@ -69,7 +69,7 @@ const Formageddon = (() => {
 
 		const originEl = document.querySelector(origin);
 		if (!originEl) {
-			console.error(`element not found for data-confirm=${origin}`);
+			console.warn(`element not found for data-confirm=${origin}`);
 			return false;
 		}
 
@@ -82,8 +82,10 @@ const Formageddon = (() => {
 	* @returns {string} The error message string.
 	*/
 	function getError(input) {
+		const value = input.value.trim();
+
 		// validate for type=file accept
-		if (input.type === "file" && input.hasAttribute("accept") && input.value.trim()) {
+		if (value && input.type === "file" && input.hasAttribute("accept")) {
 			if (!isValidAccept(input)) {
 				return input.getAttribute("data-accept-err") || "Invalid file type.";
 			}
@@ -91,7 +93,7 @@ const Formageddon = (() => {
 
 		// validate for data-confirm
 		if (input.hasAttribute("data-confirm")) {
-			if (input.value.trim() && !isValidConfirm(input)) {
+			if (value && !isValidConfirm(input)) {
 				return input.getAttribute("data-confirm-err") || "Values do not match.";
 			}
 			return "";
@@ -108,22 +110,32 @@ const Formageddon = (() => {
 	}
 
 	/**
+	* Returns the element associate with the aria-describedby attribued.
+	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The invalid form control.
+	* @returns {HTMLElement|null} The HTML element referenced by aria-describedby
+	*/
+	function getMessageElement(input) {
+		const id = input.getAttribute("aria-describedby");
+		if (!id) return null;
+
+		const el = document.getElementById(id);
+		if (!el) console.warn(`element not found for aria-describedby="${id}"`);
+
+		return el;
+	}
+
+	/**
 	* Handles invalid input by setting aria-invalid=true and updating the associated error/success message container if
 	* it exists.
 	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The invalid form control.
 	*/
 	function handleInvalidInput(input) {
 		input.setAttribute("aria-invalid", "true");
-		const target = input.getAttribute("aria-describedby");
+		const target = getMessageElement(input);
 		if (target) {
-			const targetEl = document.getElementById(target);
-			if (!targetEl) {
-				console.error(`element not found for aria-describedby="${target}"`);
-			} else {
-				targetEl.classList.add("invalid");
-				targetEl.classList.remove("valid");
-				targetEl.textContent = getError(input);
-			}
+			target.classList.add("invalid");
+			target.classList.remove("valid");
+			target.textContent = getError(input);
 		}
 	}
 
@@ -134,16 +146,11 @@ const Formageddon = (() => {
 	*/
 	function handleValidInput(input) {
 		input.setAttribute("aria-invalid", "false");
-		const target = input.getAttribute("aria-describedby");
+		const target = getMessageElement(input);
 		if (target) {
-			const targetEl = document.getElementById(target);
-			if (!targetEl) {
-				console.error(`element not found for aria-describedby="${target}"`);
-			} else {
-				targetEl.classList.add("valid");
-				targetEl.classList.remove("invalid");
-				targetEl.textContent = input.getAttribute("data-success") || "";
-			}
+			target.classList.add("valid");
+			target.classList.remove("invalid");
+			target.textContent = input.getAttribute("data-success") || "";
 		}
 	}
 
@@ -153,15 +160,10 @@ const Formageddon = (() => {
 	*/
 	function clearValidation(input) {
 		input.removeAttribute("aria-invalid");
-		const target = input.getAttribute("aria-describedby");
+		const target = getMessageElement(input);
 		if (target) {
-			const targetEl = document.getElementById(target);
-			if (!targetEl) {
-				console.error(`element not found for aria-describedby="${target}"`);
-			} else {
-				targetEl.classList.remove("invalid", "valid");
-				targetEl.textContent = "";
-			}
+			target.classList.remove("invalid", "valid");
+			target.textContent = "";
 		}
 	}
 
@@ -183,12 +185,15 @@ const Formageddon = (() => {
 	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The form control to validate.
 	*/
 	function validateInput(input) {
-		if (!isValidConfirm(input) || !input.validity.valid) {
-			handleInvalidInput(input);
-		} else if (input.value.trim()) {
-			handleValidInput(input);
-		} else {
+		if (input.disabled ||
+			(input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) && input.readOnly) return;
+
+		if (!input.value.trim()) {
 			clearValidation(input);
+		} else if (!isValidConfirm(input) || !input.validity.valid) {
+			handleInvalidInput(input);
+		} else {
+			handleValidInput(input);
 		}
 	}
 
@@ -202,13 +207,13 @@ const Formageddon = (() => {
 		if (input.hasAttribute("data-confirm")) {
 			const origin = input.getAttribute("data-confirm");
 			if (!origin) {
-				console.error("data-confirm attribute set without origin reference");
+				console.warn("data-confirm attribute set without origin reference");
 				return
 			}
 
 			const originEl = document.querySelector(origin);
 			if (!originEl) {
-				console.error(`element not found for data-confirm=${origin}`);
+				console.warn(`element not found for data-confirm=${origin}`);
 				return
 			}
 
@@ -223,7 +228,7 @@ const Formageddon = (() => {
 	 */
 	function applySubmitValidator(form, submit) {
 		if (!["INPUT", "BUTTON"].includes(submit.tagName) || submit.type !== "submit") {
-			console.error("submission button expected to be of type input or button with type=submit")
+			console.warn("submission button expected to be of type input or button with type=submit")
 			return
 		}
 
@@ -239,11 +244,8 @@ const Formageddon = (() => {
 			if (forms.has(form)) return;
 			for (let el of form.elements) {
 				if (tags.includes(el.tagName) && !el.hasAttribute("data-ignore")) {
-					for (const attr of el.attributes) {
-						if (attrs.includes(attr.name)) {
-							applyValidator(el)
-							break;
-						}
+					if (attrs.some((attr) => el.hasAttribute(attr))) {
+						applyValidator(el);
 					}
 				}
 				if (el.hasAttribute("data-submit")) {
