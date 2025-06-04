@@ -286,7 +286,7 @@ const Formageddon = (() => {
 	/**
 	* @type {MutationObserver} - Watches for form or form control updates in the DOM.
 	*/
-	const observer = new MutationObserver((mutationList, observer) => {
+	const observer = new MutationObserver((mutationList, _) => {
 		const formQueue = new Set();
 
 		for (const mutation of mutationList) {
