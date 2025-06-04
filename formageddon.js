@@ -59,6 +59,24 @@ const Formageddon = (() => {
 	}
 
 	/**
+	* Validates form controls with the data-confirm attribute.
+	* @param {HTMLInputElement} input - The form control to validate.
+	* @returns {boolean} True if all control matches origin, false otherwise.
+	*/
+	function isValidConfirm(input) {
+		const origin = input.getAttribute("data-confirm");
+		if (!origin) return true;
+
+		const originEl = document.querySelector(origin);
+		if (!originEl) {
+			console.error(`element not found for data-confirm=${origin}`);
+			return false;
+		}
+
+		return input.value === originEl.value;
+	}
+
+	/**
 	* Returns a user defined error message if it exists, otherwise a default error message.
 	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The form control to check.
 	* @returns {string} The error message string.
@@ -69,6 +87,14 @@ const Formageddon = (() => {
 			if (!isValidAccept(input)) {
 				return input.getAttribute("data-accept-err") || "Invalid file type.";
 			}
+		}
+
+		// validate for data-confirm
+		if (input.hasAttribute("data-confirm")) {
+			if (input.value.trim() && !isValidConfirm(input)) {
+				return input.getAttribute("data-confirm-err") || "Values do not match.";
+			}
+			return "";
 		}
 
 		// validate all others
@@ -140,19 +166,41 @@ const Formageddon = (() => {
 	}
 
 	/**
+	* Validates a form control and sets appropriate aria-invalid and error/success messages.
+	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The form control to validate.
+	*/
+	function validateInput(input) {
+		if (!isValidConfirm(input) || !input.validity.valid) {
+			handleInvalidInput(input);
+		} else if (input.value.trim()) {
+			handleValidInput(input);
+		} else {
+			clearValidation(input);
+		}
+	}
+
+	/**
 	* Attaches input validation event listeners.
 	* @param {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement} input - The form control to validate.
 	*/
 	function applyValidator(input) {
-		input.addEventListener("input", function() {
-			if (!this.validity.valid) {
-				handleInvalidInput(this);
-			} else if (this.value.trim()) {
-				handleValidInput(this);
-			} else {
-				clearValidation(this);
+		input.addEventListener("input", () => validateInput(input));
+
+		if (input.hasAttribute("data-confirm")) {
+			const origin = input.getAttribute("data-confirm");
+			if (!origin) {
+				console.error("data-confirm attribute set without origin reference");
+				return
 			}
-		});
+
+			const originEl = document.querySelector(origin);
+			if (!originEl) {
+				console.error(`element not found for data-confirm=${origin}`);
+				return
+			}
+
+			originEl.addEventListener("input", () => validateInput(input));
+		}
 	}
 
 	/**
