@@ -17,6 +17,10 @@ It is ideal for use with minimalist CSS frameworks like Pico CSS, where `<small>
 
 ---
 
+## Interactive Playground
+
+[Formageddon playground](https://dimmerz92.github.io/formageddon/docs/web/)
+
 ## Initialisation
 
 Formageddon automatically scans and enhances all `<form>` elements with the `data-validate` attribute on DOM ready.
