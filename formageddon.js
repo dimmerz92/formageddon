@@ -245,9 +245,9 @@ const Formageddon = (() => {
 							break;
 						}
 					}
-					if (el.hasAttribute("data-submit")) {
-						applySubmitValidator(form, el);
-					}
+				}
+				if (el.hasAttribute("data-submit")) {
+					applySubmitValidator(form, el);
 				}
 			}
 			forms.add(form);
