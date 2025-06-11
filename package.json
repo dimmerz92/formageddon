@@ -1,9 +1,11 @@
 {
 	"name": "formageddon",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "A tiny, framework-agnostic HTML form validation micro-framework.",
 	"main": "formageddon.js",
-	"files": ["formageddon.js"],
+	"files": [
+		"formageddon.js"
+	],
 	"scripts": {
 		"minify": "terser formageddon.js -o formageddon.min.js -c -m",
 		"sizes": "ls -lah formageddon*.js; gzip -c formageddon.js | wc -c; gzip -c formageddon.min.js | wc -c"
