@@ -19,8 +19,8 @@
 
 ## Size
 
-- Unminified 10 KB (gzipped ~2.8 KB)
-- Minified 4.0 KB (gzipped ~1.5 KB)
+- Unminified 11 KB (gzipped ~2.8 KB)
+- Minified 4.1 KB (gzipped ~1.5 KB)
 
 ## Interactive Playground
 
