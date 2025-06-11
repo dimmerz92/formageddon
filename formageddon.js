@@ -295,11 +295,11 @@ const Formageddon = (() => {
 			for (const node of mutation.addedNodes) {
 				if (!(node instanceof HTMLElement)) continue;
 
-				if (node.tagName === "FORM") {
+				if (node.tagName === "FORM" && node.hasAttribute("data-validate")) {
 					formQueue.add(node);
 				} else {
 					const form = node.closest?.("form");
-					if (form) {
+					if (form && form.hasAttribute("data-validate")) {
 						formQueue.add(form);
 					}
 				}
