@@ -13,7 +13,7 @@
 
 ## Size
 
-~4.2 KB minified, ~1.5 KB gzipped.
+~3.2 KB minified, ~1.7 KB gzipped.
 
 ## Quick start
 
