@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Formageddon - a tiny, framework-agnostic HTML form validation nano-framework. Zero dependencies, no build step."
+    />
+    <title>Formageddon - HTML Form Validation Playground</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <img src="../assets/formageddon.png" alt="Formageddon" class="banner" />
+      <div class="header-content">
+        <hgroup>
+          <p class="tagline">
+            Because unvalidated forms require an act of God.
+          </p>
+          <p>
+            A tiny, framework-agnostic HTML form validation nano-framework.<br />
+            Zero dependencies. No build step. Just drop it in.
+          </p>
+        </hgroup>
+        <div class="chips">
+          <span class="chip">~1.5 KB gzipped</span>
+          <span class="chip">ARIA-ready</span>
+          <span class="chip">0 dependencies</span>
+          <span class="chip">no build step</span>
+        </div>
+        <div class="header-links">
+          <a href="https://github.com/dimmerz92/formageddon" role="button"
+            >GitHub</a
+          >
+          <a href="#playground" role="button" class="secondary outline"
+            >Try it</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <section id="playground" class="playground-section">
+      <div class="section-intro">
+        <h2>Live Playground</h2>
+        <p>
+          Edit the HTML on the left and see Formageddon in action on the right.
+        </p>
+      </div>
+      <div class="template-bar">
+        <span class="template-label">Examples:</span>
+        <div class="template-group" role="group" aria-label="Example templates">
+          <button class="template-btn active" data-template="basic">
+            Basic
+          </button>
+          <button class="template-btn" data-template="registration">
+            Registration
+          </button>
+          <button class="template-btn" data-template="profile">Profile</button>
+          <button class="template-btn" data-template="file">
+            Folder Upload
+          </button>
+        </div>
+      </div>
+      <div class="playground">
+        <div class="pane editor-pane">
+          <div class="pane-header"><span>HTML</span></div>
+          <textarea
+            id="editor"
+            spellcheck="false"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+          ></textarea>
+        </div>
+        <div class="pane preview-pane">
+          <div class="pane-header"><span>Preview</span></div>
+          <div id="preview" data-theme="light"></div>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <section>
+        <div class="container">
+          <h2>Getting started</h2>
+          <ol class="steps">
+            <li>
+              <div>
+                <strong>Include the script</strong>
+                <pre><code>&lt;script src="formageddon.js" defer&gt;&lt;/script&gt;</code></pre>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Add <code>data-validate</code> to your form</strong>
+                <pre><code>&lt;form data-validate&gt;
+  ...
+&lt;/form&gt;</code></pre>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong
+                  >Link a message element with
+                  <code>aria-describedby</code></strong
+                >
+                <pre><code>&lt;label for="email"&gt;
+  Email
+  &lt;input
+    id="email"
+    type="email"
+    required
+    data-required-err="Email is required."
+    data-type-err="Enter a valid email address."
+    data-success="Looks good!"
+    aria-describedby="email-msg"
+  /&gt;
+  &lt;small id="email-msg"&gt;&lt;/small&gt;
+&lt;/label&gt;</code></pre>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Optionally auto-manage the submit button</strong>
+                <pre><code>&lt;button type="submit" data-submit&gt;Submit&lt;/button&gt;</code></pre>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <h2>Installation</h2>
+          <div class="grid">
+            <article>
+              <header><strong>Browser drop-in</strong></header>
+              <pre><code>&lt;script src="formageddon.js" defer&gt;&lt;/script&gt;</code></pre>
+            </article>
+            <article>
+              <header><strong>npm</strong></header>
+              <pre><code>npm install formageddon</code></pre>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <h2>Attribute reference</h2>
+
+          <h3>Form and field control</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Attribute</th>
+                  <th>On</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>data-validate</code></td>
+                  <td><code>&lt;form&gt;</code></td>
+                  <td>Enables auto-initialisation on this form</td>
+                </tr>
+                <tr>
+                  <td><code>data-ignore</code></td>
+                  <td>any field</td>
+                  <td>Skips validation for this field entirely</td>
+                </tr>
+                <tr>
+                  <td><code>data-submit</code></td>
+                  <td><code>&lt;button type="submit"&gt;</code></td>
+                  <td>Auto-disables the button until the form is valid</td>
+                </tr>
+                <tr>
+                  <td><code>data-confirm="#id"</code></td>
+                  <td>any field</td>
+                  <td>Value must match the referenced element</td>
+                </tr>
+                <tr>
+                  <td><code>data-success</code></td>
+                  <td>any field</td>
+                  <td>
+                    Message shown in the message element when the field is valid
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Custom error messages</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Validity state</th>
+                  <th>Attribute</th>
+                  <th>Default message</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>valueMissing</code></td>
+                  <td><code>data-required-err</code></td>
+                  <td>This field is required.</td>
+                </tr>
+                <tr>
+                  <td><code>typeMismatch</code></td>
+                  <td><code>data-type-err</code></td>
+                  <td>The value is not the correct type.</td>
+                </tr>
+                <tr>
+                  <td><code>patternMismatch</code></td>
+                  <td><code>data-pattern-err</code></td>
+                  <td>The value does not match the required pattern.</td>
+                </tr>
+                <tr>
+                  <td><code>tooShort</code></td>
+                  <td><code>data-minlength-err</code></td>
+                  <td>The value is too short.</td>
+                </tr>
+                <tr>
+                  <td><code>tooLong</code></td>
+                  <td><code>data-maxlength-err</code></td>
+                  <td>The value is too long.</td>
+                </tr>
+                <tr>
+                  <td><code>rangeUnderflow</code></td>
+                  <td><code>data-min-err</code></td>
+                  <td>The value is too small.</td>
+                </tr>
+                <tr>
+                  <td><code>rangeOverflow</code></td>
+                  <td><code>data-max-err</code></td>
+                  <td>The value is too large.</td>
+                </tr>
+                <tr>
+                  <td><code>stepMismatch</code></td>
+                  <td><code>data-step-err</code></td>
+                  <td>The value does not match the step interval.</td>
+                </tr>
+                <tr>
+                  <td><code>badInput</code></td>
+                  <td><code>data-type-err</code></td>
+                  <td>The input value is invalid.</td>
+                </tr>
+                <tr>
+                  <td>File <code>accept</code></td>
+                  <td><code>data-accept-err</code></td>
+                  <td>Invalid file type.</td>
+                </tr>
+                <tr>
+                  <td>Confirm mismatch</td>
+                  <td><code>data-confirm-err</code></td>
+                  <td>Values do not match.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <h2>Behaviour</h2>
+          <div class="grid">
+            <article>
+              <strong>Validation events</strong>
+              <p>
+                Fires on <code>input</code>, <code>change</code>, and
+                <code>blur</code>. Disabled and read-only fields are skipped.
+                Empty optional fields show no state.
+              </p>
+            </article>
+            <article>
+              <strong>Dynamic forms</strong>
+              <p>
+                A <code>MutationObserver</code> watches the document body. Any
+                <code>[data-validate]</code> form added after page load is
+                automatically initialised.
+              </p>
+            </article>
+            <article>
+              <strong>Reset</strong>
+              <p>
+                Resetting a form clears all <code>aria-invalid</code> attributes
+                and message text automatically.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <h2>Styling</h2>
+          <p>
+            Formageddon ships no CSS. It sets <code>aria-invalid</code> on
+            fields and <code>.invalid</code> / <code>.valid</code> on message
+            elements.
+          </p>
+          <pre><code>:is(input, select, textarea)[aria-invalid="true"]  { border-color: #ef4444; }
+:is(input, select, textarea)[aria-invalid="false"] { border-color: #22c55e; }
+
+.invalid { color: #ef4444; }
+.valid   { color: #22c55e; }</code></pre>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>
+          MIT licence &nbsp;&middot;&nbsp;
+          <a href="https://github.com/dimmerz92/formageddon">GitHub</a>
+          &nbsp;&middot;&nbsp;
+          <a href="https://www.npmjs.com/package/formageddon">npm</a>
+        </p>
+      </div>
+    </footer>
+
+    <script src="../formageddon.js" defer></script>
+    <script src="script.js" defer></script>
+  </body>
+</html>

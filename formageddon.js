@@ -247,7 +247,7 @@ const Formageddon = (() => {
     )
       return;
 
-    // isValidAccept must be checked explicitly — the browser does not reflect accept violations in validity
+    // isValidAccept must be checked explicitly - the browser does not reflect accept violations in validity
     if (
       !isValidConfirm(input) ||
       !input.validity.valid ||
@@ -331,7 +331,7 @@ const Formageddon = (() => {
 
   /**
    * Initialises validation on a form.
-   * Safe to call multiple times — all helpers are guarded against duplicates.
+   * Safe to call multiple times - all helpers are guarded against duplicates.
    * @param {HTMLFormElement} form
    */
   function initForm(form) {

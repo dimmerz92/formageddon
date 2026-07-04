@@ -1,130 +1,129 @@
 <div align="center">
-    <img src="/assets/formageddon.png" alt="formageddon banner"/>
-    <h1>Formageddon</h1>
-    <p><b>Because unvalidated forms require an act of God.</b></p>
-    <br>
-    <p>A tiny, framework-agnostic HTML form validation <s>micro</s> nano-framework.</p>
-    <p><b>Zero dependencies. No build step. Just drop it in.</b></p>
+  <img src="/assets/formageddon.png" alt="Formageddon" />
+  <h1>Formageddon</h1>
+  <p><b>Because unvalidated forms require an act of God.</b></p>
+  <br>
+  <p>A tiny, framework-agnostic HTML form validation script.</p>
+  <p><b>Zero dependencies. No build step. Just drop it in.</b></p>
+  <br>
+  <a href="https://dimmerz92.github.io/formageddon/docs/"><b>Try the live playground →</b></a>
 </div>
 
-
-## Features
-
-- ⚡ Tiny and fast
-- 🧩 Works with native HTML5 validation
-- 🔍 Accessible by default (uses `aria-describedby`, `aria-invalid`)
-- ✨ Fully declarative using data attributes
-- 🧼 No framework, no bundler, no build
-- 🛠 Zero dependencies
+---
 
 ## Size
 
-- Unminified 11 KB (gzipped ~2.8 KB)
-- Minified 4.2 KB (gzipped ~1.5 KB)
+~4.2 KB minified, ~1.5 KB gzipped.
 
-## Interactive Playground
-
-[Formageddon playground](https://dimmerz92.github.io/formageddon/docs/web/)
-
-## Getting Started
-
-### 1. Include the script
+## Quick start
 
 ```html
+<!-- 1. Include the script -->
 <script src="formageddon.js" defer></script>
-```
 
-### 2. Add `data-validate` to your form
-
-```html
+<!-- 2. Mark your form -->
 <form data-validate>
-    ...
+
+  <!-- 3. Add native validation attributes + optional custom error messages -->
+  <input
+    type="email"
+    required
+    data-required-err="Email is required."
+    data-type-err="Enter a valid email address."
+    data-success="Looks good!"
+    aria-describedby="email-msg"
+  />
+  <small id="email-msg"></small>
+
+  <!-- 4. Optionally auto-manage the submit button -->
+  <button type="submit" data-submit>Submit</button>
+
 </form>
 ```
 
-### 3. Add native HTML validation and `data-*-err` for custom error messages
-
-```html
-<input
-    type="email"
-    data-type-err="Must be a valid email"
-    required
-    data-required-err="Email required"
-/>
-```
-
-### 4. Reference error display targets with `aria-describedby`
-
-```html
-<input ... aria-describedby="email-error">
-<small id="email-error"></small>
-```
-
-### 5. Optionally style valid and invalid inputs and messages
-
-```css
-:where(input[aria-invalid="true"], .invalid){
-    border-color: red;
-}
-
-:where(input[aria-invalid="false"], .valid) {
-    border-color: green;
-}
-```
-
-## Custom Error Messages
-
-You can customise validation error messages by adding data attributes to your input elements. Below are all supported validity states, the corresponding attribute you can use, and the default message if none is provided:
-
-| Validity State               | Attribute          | Default Error Message                          |
-|------------------------------|--------------------|------------------------------------------------|
-| valueMissing                 | data-required-err  | This field is required.                        |
-| typeMismatch                 | data-type-err      | The value is not the correct type.             |
-| patternMismatch              | data-pattern-err   | The value does not match the required pattern. |
-| tooLong                      | data-maxlength-err | The value is too long.                         |
-| tooShort                     | data-minlength-err | The value is too short.                        |
-| rangeOverflow                | data-max-err       | The value is too large.                        |
-| rangeUnderflow               | data-min-err       | The value is too small.                        |
-| stepMismatch                 | data-step-err      | The value does not match the step interval.    |
-| badInput                     | data-type-err      | The input value is invalid.                    |
-| invalid file accept (custom) | data-accept-err    | Invalid file type.                             |
-| success (custom)             | data-success       |                                                |
-
-Example:
-
-```html
-<input type="email" required data-required-err="Email is mandatory" data-type-err="Please enter a valid email address" />
-```
-
-## Accessibility
-
-Formageddon uses:
-- aria-invalid to signal input validity
-- aria-describedby to link inputs to associated error/success messages
-
-This ensures screen readers can communicate validation status effectively.
-
 ## Installation
 
-### Browser drop in - local
-
+**Browser drop-in:**
 ```html
 <script src="formageddon.js" defer></script>
 ```
 
-### Browser drop in - CDN
-
-Coming soon.
-
-### NPM
+**npm:**
 ```bash
 npm install formageddon
 ```
 
+## Features
+
+- Builds on the native [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Web/API/Constraint_validation) - no duplicate logic
+- `aria-invalid` and `aria-describedby` for out-of-the-box accessibility
+- Custom error and success messages per validity state via `data-*` attributes
+- File `accept` validation (browsers don't expose this in the Validity API)
+- Confirm-field matching via `data-confirm`
+- Submit button auto-enable/disable via `data-submit`
+- Reset clears all validation state
+- Dynamic forms and late-appended inputs supported via `MutationObserver`
+- Safe to call `Formageddon.initForm(form)` manually at any time
+
+## Attribute reference
+
+### Form and field control
+
+| Attribute | On | Purpose |
+|---|---|---|
+| `data-validate` | `<form>` | Enables auto-initialisation |
+| `data-ignore` | any field | Skips validation for this field |
+| `data-submit` | `<button type="submit">` | Auto-disables until the form is valid |
+| `data-confirm="#id"` | any field | Value must match the referenced element |
+| `data-success` | any field | Message shown when the field is valid |
+
+### Custom error messages
+
+| Validity state | Attribute | Default |
+|---|---|---|
+| `valueMissing` | `data-required-err` | This field is required. |
+| `typeMismatch` | `data-type-err` | The value is not the correct type. |
+| `patternMismatch` | `data-pattern-err` | The value does not match the required pattern. |
+| `tooShort` | `data-minlength-err` | The value is too short. |
+| `tooLong` | `data-maxlength-err` | The value is too long. |
+| `rangeUnderflow` | `data-min-err` | The value is too small. |
+| `rangeOverflow` | `data-max-err` | The value is too large. |
+| `stepMismatch` | `data-step-err` | The value does not match the step interval. |
+| `badInput` | `data-type-err` | The input value is invalid. |
+| File `accept` | `data-accept-err` | Invalid file type. |
+| Confirm mismatch | `data-confirm-err` | Values do not match. |
+
+## Validation behaviour
+
+- Fires on `input`, `change`, and `blur` events
+- Disabled and read-only fields are never validated
+- Non-required fields with an empty value are left in a neutral state - no `aria-invalid`, no message
+- On form reset, all validation state and messages are cleared automatically
+
+## Styling
+
+Formageddon sets `aria-invalid="true"` or `"false"` on the field, and adds `.invalid` or `.valid` to the linked message element. No CSS is shipped - style to taste:
+
+```css
+:is(input, select, textarea)[aria-invalid="true"]  { border-color: #ef4444; }
+:is(input, select, textarea)[aria-invalid="false"] { border-color: #22c55e; }
+
+.invalid { color: #ef4444; }
+.valid   { color: #22c55e; }
+```
+
+Works seamlessly with [Pico CSS](https://picocss.com/), where `<small>` elements under inputs serve as natural message containers.
+
+## Accessibility
+
+- `aria-invalid` signals validity state to assistive technology
+- `aria-describedby` links inputs to their error/success message elements
+- Screen readers announce validation feedback automatically
+
 ## License
 
-MIT - [LICENSE]("/LICENSE")
+[MIT](LICENSE)
 
 ## Contributing
 
-Issues and PRs are welcome! 
+Issues and PRs are welcome.
