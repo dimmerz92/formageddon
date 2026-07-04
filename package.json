@@ -1,12 +1,14 @@
 {
 	"name": "formageddon",
-	"version": "0.1.2",
+	"version": "0.2.0",
 	"description": "A tiny, framework-agnostic HTML form validation micro-framework.",
+	"type": "module",
 	"main": "formageddon.js",
 	"files": [
 		"formageddon.js"
 	],
 	"scripts": {
+		"test": "vitest run",
 		"minify": "terser formageddon.js -o formageddon.min.js -c -m",
 		"sizes": "ls -lah formageddon*.js; gzip -c formageddon.js | wc -c; gzip -c formageddon.min.js | wc -c"
 	},
@@ -31,5 +33,10 @@
 	"bugs": {
 		"url": "https://github.com/dimmerz92/formageddon/issues"
 	},
-	"homepage": "https://github.com/dimmerz92/formageddon#readme"
+	"homepage": "https://github.com/dimmerz92/formageddon#readme",
+	"devDependencies": {
+		"jsdom": "^26.1.0",
+		"terser": "^5.48.0",
+		"vitest": "^3.2.4"
+	}
 }
